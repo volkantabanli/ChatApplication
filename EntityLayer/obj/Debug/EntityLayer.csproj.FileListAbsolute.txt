@@ -1,0 +1,5 @@
+C:\Users\VOLKAN\source\repos\SignalRChat\EntityLayer\bin\Debug\EntityLayer.dll
+C:\Users\VOLKAN\source\repos\SignalRChat\EntityLayer\bin\Debug\EntityLayer.pdb
+C:\Users\VOLKAN\source\repos\SignalRChat\EntityLayer\obj\Debug\EntityLayer.csproj.CoreCompileInputs.cache
+C:\Users\VOLKAN\source\repos\SignalRChat\EntityLayer\obj\Debug\EntityLayer.dll
+C:\Users\VOLKAN\source\repos\SignalRChat\EntityLayer\obj\Debug\EntityLayer.pdb

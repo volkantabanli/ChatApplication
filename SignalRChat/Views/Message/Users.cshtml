@@ -1,0 +1,170 @@
+﻿@model UserMessageViewModel
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row app-row">
+        <div class="col-12 chat-app">
+            <div class="d-flex flex-row justify-content-between mb-3 chat-heading-container">
+                <div class="d-flex flex-row chat-heading">
+                    <a class="d-flex" href="#">
+                        <img alt="Profile Picture" src="/assets/img/profiles/l-1.jpg"
+                             class="img-thumbnail border-0 rounded-circle ml-0 mr-4 list-thumbnail align-self-center small">
+                    </a>
+                    <div class=" d-flex min-width-zero">
+                        <div class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                            <div class="min-width-zero">
+                                <a href="#">
+                                    <p class="list-item-heading mb-1 truncate ">@Session["FirstName"] @Session["LastName"]</p>
+                                </a>
+                                <p class="mb-0 text-muted text-small">Son Giriş @DateTime.Now.Hour : @DateTime.Now.Minute</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container">
+                <input type="hidden" name="OtherProfile" id="receive_id" />
+                <input type="hidden" name="SessionId" id="user_id" />
+                <input type="hidden" name="RecieveName" id="receive_name" />
+                <ul id="discussion"></ul>
+            </div>
+
+
+            <div class="app-menu">
+                <ul class="nav nav-tabs card-header-tabs ml-0 mr-0 mb-1" role="tablist">
+                    <li class="nav-item w-50 text-center">
+                        <a class="nav-link active" id="first-tab" data-toggle="tab" href="#firstFull" role="tab"
+                           aria-selected="true">Messages</a>
+                    </li>
+                    <li class="nav-item w-50 text-center">
+                        <a class="nav-link" id="second-tab" data-toggle="tab" href="#secondFull" role="tab"
+                           aria-selected="false">Contacts</a>
+                    </li>
+                </ul>
+                <div class="p-4 h-100">
+                    <div class="form-group">
+                        <input type="text" class="form-control rounded" placeholder="Search">
+                    </div>
+
+                    <a class="app-menu-button d-inline-block d-xl-none" href="#">
+                        <i class="simple-icon-options"></i>
+                    </a>
+                </div>
+
+                <div class="chat-input-container d-flex justify-content-between align-items-center">
+                    <input class="form-control flex-grow-1" type="text" placeholder="Say something..." id="txtMessage">
+                    <div>
+                        <button type="button" class="btn btn-outline-primary icon-button large">
+                            <i class="simple-icon-paper-clip"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary icon-button large" id="sendmessage">
+                            <i class="simple-icon-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+
+
+        $(function () {
+
+
+
+
+        var chat = $.connection.chatHub;
+
+        chat.client.getMessageOther = function (message,receiveName) {
+
+            const otherMessage = `<div class="card-body">
+                                    <div class="d-flex flex-row pb-2">
+                                        <a class="d-flex" href="#">
+                                            <img alt="Profile Picture" src="img/profiles/l-1.jpg"
+                                                class="img-thumbnail border-0 rounded-circle mr-3 list-thumbnail align-self-center xsmall">
+                                        </a>
+                                        <div class=" d-flex flex-grow-1 min-width-zero">
+                                            <div
+                                                class="m-2 pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                                                <div class="min-width-zero">
+                                                    <p class="mb-0 truncate list-item-heading"> ${receiveName}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="chat-text-left">
+                                        <p class="mb-0 text-semi-muted">
+                                          ${message}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div> `;
+
+            $('#discussion').append(otherMessage);
+        };
+
+        chat.client.getMessageCaller = function (message) {
+
+            const myMessage = ` <div class="card-body">
+                                    <div class="d-flex flex-row pb-2">
+                                        <a class="d-flex" href="#">
+                                            <img alt="Profile Picture" src="img/profiles/l-1.jpg"
+                                                class="img-thumbnail border-0 rounded-circle mr-3 list-thumbnail align-self-center xsmall">
+                                        </a>
+                                        <div class=" d-flex flex-grow-1 min-width-zero">
+                                            <div
+                                                class="m-2 pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                                                <div class="min-width-zero">
+                                                    <p class="mb-0 truncate list-item-heading"> @Session["FirstName"] @Session["LastName"]</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="chat-text-left">
+                                        <p class="mb-0 text-semi-muted">
+                                          ${message}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div> `;
+
+            $('#discussion').append(myMessage);
+        };
+
+        $.connection.hub.start().done(function () {
+            $('#sendmessage').click(function () {
+
+                var message = $("#txtMessage").val();
+                var receiveId = $("#receive_id").val();
+                var receiveName = $("#receive_name").val();
+                var userId = $("#user_id").val();
+                chat.server.sendMessage(message, receiveId, receiveName, userId);
+
+
+                $('#txtMessage').val('').focus();
+            });
+        });
+
+
+
+    });
+
+
+    </script>
+
+}

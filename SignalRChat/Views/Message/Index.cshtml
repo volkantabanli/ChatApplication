@@ -1,0 +1,101 @@
+﻿@model UserMessageViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container-fluid">
+    <div class="row app-row">
+        <div class="col-12 chat-app">
+            <div class="d-flex flex-row justify-content-between mb-3 chat-heading-container">
+                <div class="d-flex flex-row chat-heading">
+                    <a class="d-flex" href="#">
+                        <img alt="Profile Picture" src="/assets/img/profiles/l-1.jpg"
+                             class="img-thumbnail border-0 rounded-circle ml-0 mr-4 list-thumbnail align-self-center small">
+                    </a>
+                    <div class=" d-flex min-width-zero">
+                        <div class="card-body pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                            <div class="min-width-zero">
+                                <a href="#">
+                                    <p class="list-item-heading mb-1 truncate ">@Session["FirstName"] @Session["LastName"]</p>
+                                </a>
+                                <p class="mb-0 text-muted text-small">Son Görülme @DateTime.Now.Hour : @DateTime.Now.Minute</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-menu">
+                <ul class="nav nav-tabs card-header-tabs ml-0 mr-0 mb-1" role="tablist">
+                    <li class="nav-item w-50 text-center">
+                        <a class="nav-link active" id="first-tab" data-toggle="tab" href="#firstFull" role="tab"
+                           aria-selected="true">Messages</a>
+                    </li>
+                    <li class="nav-item w-50 text-center">
+                        <a class="nav-link" id="second-tab" data-toggle="tab" href="#secondFull" role="tab"
+                           aria-selected="false">Contacts</a>
+                    </li>
+                </ul>
+                <div class="p-4 h-100">
+                    <div class="form-group">
+                        <input type="text" class="form-control rounded" placeholder="Search">
+                    </div>
+                    <div class="tab-content h-100">
+                        <div class="tab-pane fade show active  h-100" id="firstFull" role="tabpanel"
+                             aria-labelledby="first-tab">
+                            <div class="scroll">
+                                <div class="d-flex flex-row mb-1 border-bottom pb-3 mb-3">
+                                    <a class="d-flex" href="#">
+                                        <img alt="Profile Picture" src="/assets/img/profiles/l-1.jpg"
+                                             class="img-thumbnail border-0 rounded-circle mr-3 list-thumbnail align-self-center xsmall">
+                                    </a>
+                                    <div class="d-flex flex-grow-1 min-width-zero">
+                                        <div class="pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                                            <div class="min-width-zero">
+                                                <a href="#">
+                                                    <p class=" mb-0 truncate">@Session["FirstName"] @Session["LastName"]</p>
+                                                </a>
+                                                <p class="mb-1 text-muted text-small">14:20</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade  h-100" id="secondFull" role="tabpanel" aria-labelledby="second-tab">
+                            <div class="scroll">
+
+                                @foreach (var user in Model.Users)
+                                {
+                                    <div class="d-flex flex-row mb-3 border-bottom pb-3">
+                                        <a class="d-flex" href="#">
+                                            <img alt="Profile Picture" src="/assets/img/profiles/l-1.jpg"
+                                                 class="img-thumbnail border-0 rounded-circle mr-3 list-thumbnail align-self-center xsmall">
+                                        </a>
+                                        <div class="d-flex flex-grow-1 min-width-zero">
+                                            <div class="m-2 pl-0 align-self-center d-flex flex-column flex-lg-row justify-content-between min-width-zero">
+                                                <div class="min-width-zero">
+                                                    <a href="message/Users/@user.UserId">
+                                                        <p class="mb-0 truncate">@user.FirstName @user.LastName</p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <a class="app-menu-button d-inline-block d-xl-none" href="#">
+                        <i class="simple-icon-options"></i>
+                    </a>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</div>
